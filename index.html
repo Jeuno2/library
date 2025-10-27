@@ -1,13 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<!-- <head> -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TOP Project: Library</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+
+    <div class="container">
+
+    <button class="btn open-form">New Book</button>
+
+    <div class="form-div">
+        <form action="#" method="post" class="form">
+            <p class="form-title" >New Book Form</p>
+            <div class="title">
+                <label for="title">Title:</label>
+                <input type="text" id="title" placeholder="book title">
+            </div>
+            <div class="author">
+                <label for="author">Author's Name:</label>
+                <input type="text" id="author" placeholder="author name">
+            </div>
+            <div class="pages">
+                <label for="pages">Number of Pages:</label>
+                <input type="text" id="pages" placeholder="123">
+            </div>
+
+
+            <!-- radio button selection section for has the book been read (yes or no) -->
+            <fieldset>
+                <legend>Have you read this book:</legend>
+                <div class="read">
+                    <label for="read-yes">Yes</label>
+                    <input type="radio" id="read-yes" name="read" value="Yes">
+                </div>
+                <div class="read">
+                    <label for="read-no">No</label>
+                    <input type="radio" id="read-no" name="read" value="No">
+                </div>
+            </fieldset>
+
+            <button class="btn submit" type="submit">Submit</button>
+
+            <button class="btn close-form">Close Form</button>
+            
+        </form>
+
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>

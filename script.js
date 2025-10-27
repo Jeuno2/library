@@ -1,29 +1,74 @@
 let log = console.log;
 
 const bookArray = [];
+const container = document.querySelector(".container");
 
 // book constructor
-function Book(author, title, numOfPages, beenRead) {
-    this.author = author;
+function Book(title, author, numOfPages, beenRead, uniqueID) {
     this.title = title;
+    this.author = author;
     this.numOfPages = numOfPages;
-    this.beenRead = beenRead;
-} //end constructor
+    this.beenRead = beenRead; 
+    this.uniqueID = uniqueID;
+} //end book constructor
 
-function addBookToLibrary(bookObject) {
-    bookArray.push(bookObject);
+function addBookToLibrary(title, author, numOfPages, beenRead) {
+    const uniqueID = crypto.randomUUID();
+    bookArray.push(new Book(title, author, numOfPages, beenRead, uniqueID));
 }
 
-const book1 = new Book("James", "this is my weapon", 109, true);
-const book2 = new Book("Richard", "Child's Play", 210, true);
+function displayBooks() {
+    for(let i = 0; i < bookArray.length; i++) {
+        const newCard = document.createElement("div");
+        const ul = document.createElement("ul");
+        const cardButton = document.createElement("button");
+        cardButton.innerText = "Remove Book";
+        cardButton.classList.add("btn");
+        newCard.classList.add("card");
+        newCard.appendChild(ul);
+        newCard.appendChild(cardButton);
+        container.appendChild(newCard);
+        
+        for (let prop in bookArray[i]) {
+            log(`${prop}: ${bookArray[i][prop]}`);
+            const listItem = document.createElement("li");
+            listItem.textContent = `${bookArray[i][prop]}`;
+            ul.appendChild(listItem);
+        }
+    }
+}
+
+addBookToLibrary("This Is My Weapon", "James Bries", 109, false);
+addBookToLibrary("Child's Play", "Richard Clark", 210, false);
+addBookToLibrary("Monkey Business", "Chim Panzee", 210, false);
+
+const openFormBtn = document.querySelector(".open-form");
+const closeFormBtn = document.querySelector(".close-form");
+const form = document.querySelector(".form-div");
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+})
 
 
-log(book1);
-log(book1.author);
 
-addBookToLibrary(book1);
-addBookToLibrary(book2);
+const submit = document.querySelector(".submit");
+submit.addEventListener('click', () => {
+    const bookTitle = document.getElementById("title").value;
+    log(bookTitle);
+});
 
-log(bookArray);
+
+
+openFormBtn.addEventListener('click', () => {
+    form.style.display = "block";
+})
+
+
+closeFormBtn.addEventListener('click', () => {
+    form.style.display = "none";
+});
+
+displayBooks();
 
 
