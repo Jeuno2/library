@@ -1,7 +1,16 @@
+
 let log = console.log;
 
+// declarations
 const bookArray = [];
 const container = document.querySelector(".container");
+const openFormBtn = document.querySelector(".open-form");
+const closeFormBtn = document.querySelector(".close-form");
+const form = document.querySelector(".form-div");
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+});
 
 // book constructor
 function Book(title, author, numOfPages, beenRead, uniqueID) {
@@ -15,60 +24,54 @@ function Book(title, author, numOfPages, beenRead, uniqueID) {
 function addBookToLibrary(title, author, numOfPages, beenRead) {
     const uniqueID = crypto.randomUUID();
     bookArray.push(new Book(title, author, numOfPages, beenRead, uniqueID));
+    displayBooks();
 }
 
 function displayBooks() {
-    for(let i = 0; i < bookArray.length; i++) {
-        const newCard = document.createElement("div");
-        const ul = document.createElement("ul");
-        const cardButton = document.createElement("button");
-        cardButton.innerText = "Remove Book";
-        cardButton.classList.add("btn");
-        newCard.classList.add("card");
-        newCard.appendChild(ul);
-        newCard.appendChild(cardButton);
-        container.appendChild(newCard);
-        
-        for (let prop in bookArray[i]) {
-            log(`${prop}: ${bookArray[i][prop]}`);
-            const listItem = document.createElement("li");
-            listItem.textContent = `${bookArray[i][prop]}`;
-            ul.appendChild(listItem);
+
+    const newCard = document.createElement("div");
+    newCard.classList.add("card");
+    container.appendChild(newCard);
+
+    const ul = document.createElement("ul");
+    const cardButton = document.createElement("button");
+    cardButton.innerText = "Remove Book";
+    cardButton.classList.add("btn");
+    
+    newCard.appendChild(ul);
+    newCard.appendChild(cardButton);
+
+    bookArray.forEach(element => {
+        if(element === bookArray[bookArray.length - 1]) {
+            for (innerElement in element) {
+                const listItem = document.createElement("li");
+                listItem.textContent = element[innerElement];
+                ul.appendChild(listItem);
+            }
         }
-    }
+    });
 }
 
-addBookToLibrary("This Is My Weapon", "James Bries", 109, false);
-addBookToLibrary("Child's Play", "Richard Clark", 210, false);
-addBookToLibrary("Monkey Business", "Chim Panzee", 210, false);
+addBookToLibrary('Jumanji', 'Chris Reeves', 432, true);
+addBookToLibrary('Bald Eagle', 'Aaron Mart', 341, true);
+addBookToLibrary('Have You Seen My Baseball', 'Ling Mei Ma', 341, true);
 
-const openFormBtn = document.querySelector(".open-form");
-const closeFormBtn = document.querySelector(".close-form");
-const form = document.querySelector(".form-div");
-
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
-})
-
-
-
-const submit = document.querySelector(".submit");
-submit.addEventListener('click', () => {
-    const bookTitle = document.getElementById("title").value;
-    log(bookTitle);
-});
+// clicking submit button on form sends all values to addBookToLibrary method to create card using book object
+// const submit = document.querySelector(".submit");
+// submit.addEventListener('click', () => {
+//     const bookTitle = document.getElementById("title").value;
+//     const author = document.getElementById("author").value;
+//     const numOfPages = document.getElementById("pages").value;
+//     addBookToLibrary(bookTitle, author, numOfPages, true);
+// });
 
 
-
+// clicking button opens form
 openFormBtn.addEventListener('click', () => {
     form.style.display = "block";
 })
 
-
+// clicking button closes form
 closeFormBtn.addEventListener('click', () => {
     form.style.display = "none";
 });
-
-displayBooks();
-
-
