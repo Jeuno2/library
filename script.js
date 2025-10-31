@@ -24,10 +24,10 @@ function Book(title, author, numOfPages, beenRead, uniqueID) {
 function addBookToLibrary(title, author, numOfPages, beenRead) {
     const uniqueID = crypto.randomUUID();
     bookArray.push(new Book(title, author, numOfPages, beenRead, uniqueID));
-    displayBooks();
+    displayBooks(uniqueID);
 }
 
-function displayBooks() {
+function displayBooks(uniqueID) {
 
     const newCard = document.createElement("div");
     newCard.classList.add("card");
@@ -37,6 +37,20 @@ function displayBooks() {
     const cardButton = document.createElement("button");
     cardButton.innerText = "Remove Book";
     cardButton.classList.add("btn");
+    cardButton.setAttribute('id', uniqueID);
+    
+    log(bookArray);
+    cardButton.addEventListener('click', () => {
+        bookArray.forEach(element => {
+            for(innerElement in element) {
+                if(element[innerElement] === uniqueID) {
+                    bookArray.splice(element, 1);
+                    newCard.remove();
+                } 
+            } 
+        });
+        log(bookArray)
+    });
     
     newCard.appendChild(ul);
     newCard.appendChild(cardButton);
@@ -50,21 +64,27 @@ function displayBooks() {
             }
         }
     });
-}
-
-addBookToLibrary('Jumanji', 'Chris Reeves', 432, true);
-addBookToLibrary('Bald Eagle', 'Aaron Mart', 341, true);
-addBookToLibrary('Have You Seen My Baseball', 'Ling Mei Ma', 341, true);
+}   
 
 // clicking submit button on form sends all values to addBookToLibrary method to create card using book object
-// const submit = document.querySelector(".submit");
-// submit.addEventListener('click', () => {
-//     const bookTitle = document.getElementById("title").value;
-//     const author = document.getElementById("author").value;
-//     const numOfPages = document.getElementById("pages").value;
-//     addBookToLibrary(bookTitle, author, numOfPages, true);
-// });
+const submit = document.querySelector(".submit");
+submit.addEventListener('click', () => {
+    const bookTitle = document.getElementById("title").value;
+    const author = document.getElementById("author").value;
+    const numOfPages = document.getElementById("pages").value;
 
+    const radioButtons = document.getElementsByName('read');
+    let selectedValue;
+    for(let i = 0; i < radioButtons.length; i++) {
+        if (radioButtons[i].checked) {
+            selectedValue = radioButtons[i].value;
+            break;
+        }
+        // log(selectedValue);
+    }
+
+    addBookToLibrary(bookTitle, author, numOfPages, selectedValue);
+});
 
 // clicking button opens form
 openFormBtn.addEventListener('click', () => {
