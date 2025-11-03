@@ -2,13 +2,15 @@
 let log = console.log;
 
 // declarations
-const bookArray = [];
-const container = document.querySelector(".container");
-const openFormBtn = document.querySelector(".open-form");
-const closeFormBtn = document.querySelector(".close-form");
-const form = document.querySelector(".form-div");
+const bookArray = []; //array to store all book objects
 
-form.addEventListener('submit', (e) => {
+const openFormBtn = document.querySelector(".open-form"); //"New Book" button
+const container = document.querySelector(".container");
+const closeFormBtn = document.querySelector(".close-form");
+const formDisplay = document.querySelector(".form-div");
+const form = document.querySelector("#form");
+
+formDisplay.addEventListener('submit', (e) => {
     e.preventDefault();
 });
 
@@ -29,32 +31,22 @@ function addBookToLibrary(title, author, numOfPages, beenRead) {
 
 function displayBooks(uniqueID) {
 
+    // create new card with class "card" and add to flex container
     const newCard = document.createElement("div");
     newCard.classList.add("card");
     container.appendChild(newCard);
 
-    const ul = document.createElement("ul");
+    // create card button for each book card and add button to card
     const cardButton = document.createElement("button");
     cardButton.innerText = "Remove Book";
     cardButton.classList.add("btn");
-    cardButton.setAttribute('id', uniqueID);
-    
-    log(bookArray);
-    cardButton.addEventListener('click', () => {
-        bookArray.forEach(element => {
-            for(innerElement in element) {
-                if(element[innerElement] === uniqueID) {
-                    bookArray.splice(element, 1);
-                    newCard.remove();
-                } 
-            } 
-        });
-        log(bookArray)
-    });
-    
-    newCard.appendChild(ul);
     newCard.appendChild(cardButton);
 
+    // create unordered list to be on each 
+    const ul = document.createElement("ul");
+    newCard.appendChild(ul);
+    
+    // loop through array of books then loop through each book object's properties turning them into list items and adding to unordered list
     bookArray.forEach(element => {
         if(element === bookArray[bookArray.length - 1]) {
             for (innerElement in element) {
@@ -63,6 +55,24 @@ function displayBooks(uniqueID) {
                 ul.appendChild(listItem);
             }
         }
+    });
+
+    newCard.setAttribute('data-id', `${uniqueID}`);
+    
+    // remove book object from library/display section
+    cardButton.addEventListener('click', () => {
+        bookArray.forEach(element => {
+            for(innerElement in element) {
+                if(element[innerElement] === cardButton.parentElement.getAttribute('data-id')) {
+                    let index = bookArray.indexOf(element)
+                    bookArray.splice(index, 1)
+                    log(element[innerElement]);
+                    log(cardButton.parentElement.getAttribute(`data-id`));
+                    cardButton.parentElement.remove();
+                }
+            }
+        });
+        log(bookArray);
     });
 }   
 
@@ -80,10 +90,10 @@ submit.addEventListener('click', () => {
             selectedValue = radioButtons[i].value;
             break;
         }
-        // log(selectedValue);
     }
 
     addBookToLibrary(bookTitle, author, numOfPages, selectedValue);
+    form.reset();
 });
 
 // clicking button opens form
