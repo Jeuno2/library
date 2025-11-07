@@ -16,12 +16,32 @@ formDisplay.addEventListener('submit', (e) => {
 
 // book constructor
 function Book(title, author, numOfPages, beenRead, uniqueID) {
+    if(!new.target) {
+        throw Error(`You must use the 'new' operator to call the constructor`);
+    }
     this.title = title;
     this.author = author;
     this.numOfPages = numOfPages;
     this.beenRead = beenRead; 
     this.uniqueID = uniqueID;
 } //end book constructor
+
+Object.defineProperty(Book.prototype, 'changeReadStatus', {
+    value: function() {
+        if(this.beenRead === "false") {
+            this.beenRead = "true";
+        }
+        else if (this.beenRead === "true") {
+            this.beenRead = "false";
+        }
+        
+        return(this.beenRead);
+        
+    },
+    enumerable: false,
+    writable: true,
+    configurable: true
+});
 
 function addBookToLibrary(title, author, numOfPages, beenRead) {
     const uniqueID = crypto.randomUUID();
@@ -36,15 +56,16 @@ function displayBooks(uniqueID) {
     newCard.classList.add("card");
     container.appendChild(newCard);
 
-    // create card button for each book card and add button to card
-    const cardButton = document.createElement("button");
-    cardButton.innerText = "Remove Book";
-    cardButton.classList.add("btn");
-    newCard.appendChild(cardButton);
-
     // create unordered list to be on each 
     const ul = document.createElement("ul");
     newCard.appendChild(ul);
+
+    // button to change read status (yes or no)
+    const readButton = document.createElement("button");
+    readButton.innerText = "Toggle Has Read";
+    readButton.classList.add("btn");
+    readButton.classList.add("readButton");
+    newCard.appendChild(readButton);
     
     // loop through array of books then loop through each book object's properties turning them into list items and adding to unordered list
     bookArray.forEach(element => {
@@ -57,6 +78,12 @@ function displayBooks(uniqueID) {
         }
     });
 
+    // create card button for each book card and add button to card
+    const cardButton = document.createElement("button");
+    cardButton.innerText = "Remove Book";
+    cardButton.classList.add("btn");
+    newCard.appendChild(cardButton);
+
     newCard.setAttribute('data-id', `${uniqueID}`);
     
     // remove book object from library/display section
@@ -65,14 +92,26 @@ function displayBooks(uniqueID) {
             for(innerElement in element) {
                 if(element[innerElement] === cardButton.parentElement.getAttribute('data-id')) {
                     let index = bookArray.indexOf(element)
-                    bookArray.splice(index, 1)
-                    log(element[innerElement]);
-                    log(cardButton.parentElement.getAttribute(`data-id`));
+                    bookArray.splice(index, 1);
                     cardButton.parentElement.remove();
                 }
             }
         });
         log(bookArray);
+    });
+
+    readButton.addEventListener('click', () => {
+        bookArray.forEach(element => {
+            let hasBeenRead = null;
+            for(innerElement in element) {
+                if(element[innerElement] === readButton.parentElement.getAttribute('data-id')) {
+                    let nodeList = newCard.children[0].children[3];
+                    hasBeenRead = element.changeReadStatus();
+                    log(hasBeenRead);
+                    nodeList.textContent = hasBeenRead;
+                }
+            }
+        });
     });
 }   
 
