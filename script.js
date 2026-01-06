@@ -15,19 +15,32 @@ formDisplay.addEventListener('submit', (e) => {
 });
 
 // book constructor
-function Book(title, author, numOfPages, beenRead, uniqueID) {
-    if(!new.target) {
-        throw Error(`You must use the 'new' operator to call the constructor`);
-    }
-    this.title = title;
-    this.author = author;
-    this.numOfPages = numOfPages;
-    this.beenRead = beenRead; 
-    this.uniqueID = uniqueID;
-} //end book constructor
+// function Book(title, author, numOfPages, beenRead, uniqueID) {
+//     if(!new.target) {
+//         throw Error(`You must use the 'new' operator to call the constructor`);
+//     }
+//     this.title = title;
+//     this.author = author;
+//     this.numOfPages = numOfPages;
+//     this.beenRead = beenRead; 
+//     this.uniqueID = uniqueID;
+// } //end book constructor
 
-Object.defineProperty(Book.prototype, 'changeReadStatus', {
-    value: function() {
+// Class Book
+class Book {
+
+    constructor(title, author, numOfPages, beenRead, uniqueID) {
+        if(!new.target) {
+            throw Error(`You must use the 'new' operator to call the constructor`);
+        }
+        this.title = title;
+        this.author = author;
+        this.numOfPages = numOfPages;
+        this.beenRead = beenRead; 
+        this.uniqueID = uniqueID;
+    }
+
+    changeReadStatus() {
         if(this.beenRead === "false") {
             this.beenRead = "true";
         }
@@ -36,12 +49,25 @@ Object.defineProperty(Book.prototype, 'changeReadStatus', {
         }
         
         return(this.beenRead);
+    }
+}
+
+// Object.defineProperty(Book.prototype, 'changeReadStatus', {
+//     value: function() {
+//         if(this.beenRead === "false") {
+//             this.beenRead = "true";
+//         }
+//         else if (this.beenRead === "true") {
+//             this.beenRead = "false";
+//         }
         
-    },
-    enumerable: false,
-    writable: true,
-    configurable: true
-});
+//         return(this.beenRead);
+        
+//     },
+//     enumerable: false,
+//     writable: true,
+//     configurable: true
+// });
 
 function addBookToLibrary(title, author, numOfPages, beenRead) {
     const uniqueID = crypto.randomUUID();
